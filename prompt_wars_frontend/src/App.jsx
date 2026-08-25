@@ -14,7 +14,7 @@ import { api } from './services/api';
 import { INITIAL_BUILDERS, INITIAL_PROJECTS } from './data/mockData';
 import { CANDIDATES } from './data/candidatesData';
 import { sound } from './utils/sound';
-import { CheckCircle2, AlertCircle, Mail } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('landing');
@@ -65,15 +65,14 @@ export default function App() {
 
   const handleLogin = (userProfile) => {
     setCurrentUser(userProfile);
-    showToast(`Welcome, ${userProfile.name}! Profile active.`);
+    setActiveTab('discovery'); // Immediately switch from landing to Find Teammates workspace
+    showToast(`Welcome @${userProfile.username || userProfile.name}!`);
   };
 
   const handleLogout = () => {
     sound.playClick();
     setCurrentUser(null);
-    if (activeTab === 'my-profile') {
-      setActiveTab('landing');
-    }
+    setActiveTab('landing');
     showToast('You have successfully logged out.');
   };
 
@@ -85,7 +84,7 @@ export default function App() {
       name: newCandidate.name,
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       role_title: newCandidate.role,
-      primary_category: newCandidate.skills[0]?.name.includes('Python') ? 'AI / ML' : 'Backend',
+      primary_category: newCandidate.skills[0]?.name?.includes('Python') ? 'AI / ML' : 'Backend',
       bio: newCandidate.bio,
       skills: newCandidate.skills.map(s => s.name),
       skill_scores: { frontend: 70, backend: 80, ai_data: 85, design_ux: 60, pitch_biz: 65 },
@@ -99,7 +98,7 @@ export default function App() {
     };
     setAllBuilders([newBuilder, ...allBuilders]);
     
-    showToast(`? ${newCandidate.name} added to the candidate pool! Team leads can now discover and email you.`);
+    showToast(`${newCandidate.name} added to candidate pool!`);
   };
 
   const handleOpenEmailModal = (candidate) => {
@@ -111,7 +110,7 @@ export default function App() {
   };
 
   const handleEmailSent = (candidate, receipt) => {
-    showToast(`?? Invitation email dispatched to ${candidate.name}!`);
+    showToast(`Invitation email dispatched to ${candidate.name}!`);
   };
 
   return (
@@ -152,18 +151,28 @@ export default function App() {
         currentUser={currentUser}
         onOpenLogin={() => setIsLoginModalOpen(true)}
         onLogout={handleLogout}
+        onOpenManifest={() => setIsManifestOpen(true)}
+        onOpenCandidateRegistration={() => setIsCandidateModalOpen(true)}
+        onOpenLanding={() => setActiveTab('landing')}
       />
 
       <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>
         {activeTab === 'landing' && (
           <LandingPage
-            onGetStarted={() => setIsCandidateModalOpen(true)}
-            onExploreTeammates={() => setActiveTab('discover')}
+            currentUser={currentUser}
+            onGetStarted={() => {
+              if (currentUser) {
+                setActiveTab('discovery');
+              } else {
+                setIsLoginModalOpen(true);
+              }
+            }}
+            onExploreAsGuest={() => setActiveTab('discovery')}
             onOpenSignIn={() => setIsLoginModalOpen(true)}
           />
         )}
 
-        {activeTab === 'discover' && (
+        {activeTab === 'discovery' && (
           <TeammateDiscoveryView
             candidatesList={candidatesList}
             onShowToast={showToast}
@@ -176,16 +185,7 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'my-profile' && (
-          <MyProfileSkillsView
-            currentUser={currentUser}
-            onUpdateUser={setCurrentUser}
-            allProjects={allProjects}
-            onShowToast={showToast}
-          />
-        )}
-
-        {activeTab === 'synergy' && (
+        {activeTab === 'analytics' && (
           <SynergyLab
             activeSquad={activeSquad}
             setActiveSquad={setActiveSquad}
@@ -204,6 +204,15 @@ export default function App() {
             onRequireAuth={() => setIsLoginModalOpen(true)}
           />
         )}
+
+        {activeTab === 'profile' && (
+          <MyProfileSkillsView
+            currentUser={currentUser}
+            onUpdateUser={setCurrentUser}
+            allProjects={allProjects}
+            onShowToast={showToast}
+          />
+        )}
       </main>
 
       <footer style={{
@@ -219,7 +228,7 @@ export default function App() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ fontWeight: 700, color: '#f8fafc' }}>Equipo</span>
-            <span>�</span>
+            <span>•</span>
             <span>Autonomous Skill Matching & Project Synergy Platform</span>
           </div>
           <div style={{ color: 'var(--text-muted)' }}>

@@ -16,25 +16,14 @@ import { sound } from '../utils/sound';
 export default function Navbar({ 
   activeTab,
   setActiveTab,
-  currentTab, 
-  setCurrentTab, 
   currentUser, 
   onOpenLogin,
-  onOpenSignIn, 
   onLogout,
   onOpenManifest,
   onOpenCandidateRegistration,
   onOpenLanding
 }) {
-  const current = activeTab || currentTab || 'landing';
-  const setTab = (tab) => {
-    if (setActiveTab) setActiveTab(tab);
-    if (setCurrentTab) setCurrentTab(tab);
-  };
-  const openLogin = onOpenLogin || onOpenSignIn || (() => {});
-  const openManifest = onOpenManifest || (() => {});
-  const openCandidateReg = onOpenCandidateRegistration || (() => {});
-  const openLanding = onOpenLanding || (() => setTab('landing'));
+  const current = activeTab || 'landing';
 
   return (
     <header className="navbar-enterprise">
@@ -42,7 +31,7 @@ export default function Navbar({
         
         {/* Brand Logo & Name */}
         <div 
-          onClick={() => { sound.playClick(); openLanding(); }} 
+          onClick={() => { sound.playClick(); onOpenLanding ? onOpenLanding() : setActiveTab('landing'); }} 
           style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', cursor: 'pointer' }}
         >
           <img 
@@ -83,7 +72,7 @@ export default function Navbar({
         <nav className="nav-tabs">
           <button 
             className={`nav-tab-item ${current === 'discovery' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setTab('discovery'); }}
+            onClick={() => { sound.playClick(); setActiveTab('discovery'); }}
           >
             <Grid size={15} />
             <span>Find Teammates</span>
@@ -91,7 +80,7 @@ export default function Navbar({
 
           <button 
             className={`nav-tab-item ${current === 'analytics' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setTab('analytics'); }}
+            onClick={() => { sound.playClick(); setActiveTab('analytics'); }}
           >
             <Sparkles size={15} />
             <span>Team Analytics</span>
@@ -99,15 +88,15 @@ export default function Navbar({
 
           <button 
             className={`nav-tab-item ${current === 'projects' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setTab('projects'); }}
+            onClick={() => { sound.playClick(); setActiveTab('projects'); }}
           >
             <Users size={15} />
             <span>Project Hub</span>
           </button>
 
           <button 
-            className={`nav-tab-item ${current === 'my-profile' || current === 'profile' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setTab('my-profile'); }}
+            className={`nav-tab-item ${current === 'profile' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setActiveTab('profile'); }}
           >
             <UserCheck size={15} />
             <span>My Skills & Matches</span>
@@ -119,7 +108,7 @@ export default function Navbar({
           
           <button 
             className="btn-secondary"
-            onClick={() => { sound.playClick(); openCandidateReg(); }}
+            onClick={() => { sound.playClick(); onOpenCandidateRegistration(); }}
             style={{ fontSize: '0.75rem', padding: '0.45rem 0.8rem' }}
           >
             + Join Candidate Pool
@@ -127,7 +116,7 @@ export default function Navbar({
 
           <button 
             className="btn-primary"
-            onClick={() => { sound.playClick(); openManifest(); }}
+            onClick={() => { sound.playClick(); onOpenManifest(); }}
             style={{ fontSize: '0.75rem', padding: '0.45rem 0.85rem' }}
           >
             <FileText size={14} />
@@ -166,7 +155,7 @@ export default function Navbar({
           ) : (
             <button 
               className="btn-secondary"
-              onClick={() => { sound.playClick(); openLogin(); }}
+              onClick={() => { sound.playClick(); onOpenLogin(); }}
               style={{ fontSize: '0.75rem', padding: '0.45rem 0.8rem', color: '#c4b5fd', borderColor: '#3d497c' }}
             >
               <LogIn size={14} />
