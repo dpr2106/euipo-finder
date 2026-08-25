@@ -14,22 +14,35 @@ import {
 import { sound } from '../utils/sound';
 
 export default function Navbar({ 
+  activeTab,
+  setActiveTab,
   currentTab, 
   setCurrentTab, 
   currentUser, 
+  onOpenLogin,
   onOpenSignIn, 
   onLogout,
   onOpenManifest,
   onOpenCandidateRegistration,
   onOpenLanding
 }) {
+  const current = activeTab || currentTab || 'landing';
+  const setTab = (tab) => {
+    if (setActiveTab) setActiveTab(tab);
+    if (setCurrentTab) setCurrentTab(tab);
+  };
+  const openLogin = onOpenLogin || onOpenSignIn || (() => {});
+  const openManifest = onOpenManifest || (() => {});
+  const openCandidateReg = onOpenCandidateRegistration || (() => {});
+  const openLanding = onOpenLanding || (() => setTab('landing'));
+
   return (
     <header className="navbar-enterprise">
       <div className="navbar-container">
         
         {/* Brand Logo & Name */}
         <div 
-          onClick={() => { sound.playClick(); onOpenLanding ? onOpenLanding() : setCurrentTab('discovery'); }} 
+          onClick={() => { sound.playClick(); openLanding(); }} 
           style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', cursor: 'pointer' }}
         >
           <img 
@@ -69,32 +82,32 @@ export default function Navbar({
         {/* Primary Navigation Tabs */}
         <nav className="nav-tabs">
           <button 
-            className={`nav-tab-item ${currentTab === 'discovery' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setCurrentTab('discovery'); }}
+            className={`nav-tab-item ${current === 'discovery' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setTab('discovery'); }}
           >
             <Grid size={15} />
             <span>Find Teammates</span>
           </button>
 
           <button 
-            className={`nav-tab-item ${currentTab === 'analytics' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setCurrentTab('analytics'); }}
+            className={`nav-tab-item ${current === 'analytics' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setTab('analytics'); }}
           >
             <Sparkles size={15} />
             <span>Team Analytics</span>
           </button>
 
           <button 
-            className={`nav-tab-item ${currentTab === 'projects' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setCurrentTab('projects'); }}
+            className={`nav-tab-item ${current === 'projects' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setTab('projects'); }}
           >
             <Users size={15} />
             <span>Project Hub</span>
           </button>
 
           <button 
-            className={`nav-tab-item ${currentTab === 'profile' ? 'active' : ''}`}
-            onClick={() => { sound.playClick(); setCurrentTab('profile'); }}
+            className={`nav-tab-item ${current === 'my-profile' || current === 'profile' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setTab('my-profile'); }}
           >
             <UserCheck size={15} />
             <span>My Skills & Matches</span>
@@ -106,7 +119,7 @@ export default function Navbar({
           
           <button 
             className="btn-secondary"
-            onClick={() => { sound.playClick(); onOpenCandidateRegistration(); }}
+            onClick={() => { sound.playClick(); openCandidateReg(); }}
             style={{ fontSize: '0.75rem', padding: '0.45rem 0.8rem' }}
           >
             + Join Candidate Pool
@@ -114,7 +127,7 @@ export default function Navbar({
 
           <button 
             className="btn-primary"
-            onClick={() => { sound.playClick(); onOpenManifest(); }}
+            onClick={() => { sound.playClick(); openManifest(); }}
             style={{ fontSize: '0.75rem', padding: '0.45rem 0.85rem' }}
           >
             <FileText size={14} />
@@ -153,7 +166,7 @@ export default function Navbar({
           ) : (
             <button 
               className="btn-secondary"
-              onClick={() => { sound.playClick(); onOpenSignIn(); }}
+              onClick={() => { sound.playClick(); openLogin(); }}
               style={{ fontSize: '0.75rem', padding: '0.45rem 0.8rem', color: '#c4b5fd', borderColor: '#3d497c' }}
             >
               <LogIn size={14} />
