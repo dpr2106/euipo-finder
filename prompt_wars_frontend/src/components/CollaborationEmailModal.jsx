@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Mail, Send, CheckCircle2, X, Sparkles, Shield, Clock, ArrowRight, UserCheck } from 'lucide-react';
 import { sound } from '../utils/sound';
 
@@ -9,11 +9,14 @@ export default function CollaborationEmailModal({
   currentUser,
   onEmailSent
 }) {
+  const defaultSenderEmail = currentUser?.email || 'prashanthraodugyala34@gmail.com';
+  
   const [subject, setSubject] = useState(
     recipientCandidate
-      ? `[Equipo Invitation] ${currentUser?.name || 'Project Lead'} invited you to join their team`
+      ? `[Equipo Collaboration] Prashant Sharma wants to build with you on AI & Fullstack Systems`
       : ''
   );
+  const [senderEmail, setSenderEmail] = useState(defaultSenderEmail);
   const [projectTitle, setProjectTitle] = useState('Autonomous Compliance & Multi-Agent Network');
   const [roleOffer, setRoleOffer] = useState(recipientCandidate?.role || 'Technical Contributor');
   const [personalNote, setPersonalNote] = useState(
@@ -24,7 +27,6 @@ export default function CollaborationEmailModal({
 
   if (!isOpen || !recipientCandidate) return null;
 
-  const senderEmail = currentUser?.email || `${(currentUser?.name || 'builder').toLowerCase().replace(/\s+/g, '.')}@equipo.network`;
   const recipientEmail = recipientCandidate.email || `${recipientCandidate.name.toLowerCase().replace(/\s+/g, '.')}@equipo.network`;
 
   const handleSendEmail = (e) => {
@@ -102,7 +104,7 @@ export default function CollaborationEmailModal({
                 Invitation Dispatched!
               </h2>
               <p style={{ fontSize: '0.85rem', color: '#a5b4fc', marginTop: '0.25rem' }}>
-                Official Equipo collaboration email successfully transmitted to <strong>{sentReceipt.recipient_email}</strong>.
+                Official Equipo collaboration email successfully transmitted from <strong>{sentReceipt.sender_email}</strong> to <strong>{sentReceipt.recipient_email}</strong>.
               </p>
             </div>
 
@@ -124,12 +126,16 @@ export default function CollaborationEmailModal({
                 <strong style={{ fontFamily: 'var(--font-mono)', color: '#c4b5fd' }}>{sentReceipt.dispatch_id}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#818cf8' }}>Sender Address:</span>
+                <span style={{ color: '#6ee7b7' }}>{sentReceipt.sender_email}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: '#818cf8' }}>Delivery Timestamp:</span>
                 <span>{sentReceipt.sent_at}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: '#818cf8' }}>Status:</span>
-                <span style={{ color: '#10b981', fontWeight: 600 }}>Delivered to Inbox</span>
+                <span style={{ color: '#10b981', fontWeight: 600 }}>Delivered to Recipient Inbox</span>
               </div>
             </div>
 
@@ -166,14 +172,18 @@ export default function CollaborationEmailModal({
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', background: '#0a0b14', padding: '0.75rem', borderRadius: '0.45rem', border: '1px solid #293154', fontSize: '0.75rem' }}>
                 <div>
-                  <span style={{ color: '#818cf8', display: 'block', marginBottom: '2px' }}>FROM:</span>
-                  <div style={{ fontWeight: 600, color: '#f8fafc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {senderEmail}
-                  </div>
+                  <span style={{ color: '#818cf8', display: 'block', marginBottom: '2px' }}>SENDER (FROM):</span>
+                  <input
+                    type="email"
+                    required
+                    value={senderEmail}
+                    onChange={(e) => setSenderEmail(e.target.value)}
+                    style={{ width: '100%', background: '#121424', border: '1px solid #3d497c', color: '#6ee7b7', padding: '0.35rem 0.5rem', borderRadius: '0.35rem', fontSize: '0.75rem', outline: 'none' }}
+                  />
                 </div>
                 <div>
-                  <span style={{ color: '#818cf8', display: 'block', marginBottom: '2px' }}>TO:</span>
-                  <div style={{ fontWeight: 600, color: '#c4b5fd', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ color: '#818cf8', display: 'block', marginBottom: '2px' }}>RECIPIENT (TO):</span>
+                  <div style={{ fontWeight: 600, color: '#c4b5fd', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingTop: '0.35rem' }}>
                     {recipientCandidate.name} ({recipientEmail})
                   </div>
                 </div>
@@ -240,10 +250,10 @@ export default function CollaborationEmailModal({
                 style={{ justifyContent: 'center', padding: '0.65rem', marginTop: '0.35rem' }}
               >
                 {isSending ? (
-                  <>Transmitting to Inbox...</>
+                  <>Transmitting from {senderEmail}...</>
                 ) : (
                   <>
-                    <Send size={15} /> Transmit Email Invitation
+                    <Send size={15} /> Transmit Email from {senderEmail}
                   </>
                 )}
               </button>

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Shield, ArrowRight, CheckCircle2, Sparkles, Users, BarChart3, Cpu, Search, Layers, Rocket, Microscope, Trophy, Code2 } from 'lucide-react';
 import { sound } from '../utils/sound';
 
@@ -83,7 +83,7 @@ export default function LandingPage({ onGetStarted, onExploreTeammates, onOpenSi
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
           <button
             className="btn-primary"
-            onClick={() => { sound.playClick(); onGetStarted(); }}
+            onClick={() => { sound.playClick(); onOpenSignIn(); }}
             style={{ padding: '0.75rem 1.6rem', fontSize: '0.95rem' }}
           >
             Create Your Profile <ArrowRight size={16} />
@@ -151,8 +151,8 @@ export default function LandingPage({ onGetStarted, onExploreTeammates, onOpenSi
               </div>
 
               <div style={{ marginTop: '0.85rem', padding: '0.65rem', background: '#11141d', borderRadius: '4px', fontSize: '0.75rem', color: '#cbd5e1' }}>
-                <div style={{ color: '#10b981', fontWeight: 600 }}>✓ Fills open React / UI Developer requirement</div>
-                <div style={{ color: '#10b981', fontWeight: 600, marginTop: '2px' }}>✓ Complementary to Backend & Data Leads</div>
+                <div style={{ color: '#10b981', fontWeight: 600 }}>âœ“ Fills open React / UI Developer requirement</div>
+                <div style={{ color: '#10b981', fontWeight: 600, marginTop: '2px' }}>âœ“ Complementary to Backend & Data Leads</div>
               </div>
             </div>
 
@@ -289,7 +289,7 @@ export default function LandingPage({ onGetStarted, onExploreTeammates, onOpenSi
           </p>
           <button
             className="btn-primary"
-            onClick={() => { sound.playClick(); onGetStarted(); }}
+            onClick={() => { sound.playClick(); onOpenSignIn(); }}
             style={{ padding: '0.75rem 1.75rem', fontSize: '0.95rem' }}
           >
             Create Your Profile <ArrowRight size={16} />
