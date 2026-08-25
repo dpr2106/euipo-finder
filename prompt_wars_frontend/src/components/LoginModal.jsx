@@ -1,9 +1,11 @@
 ﻿import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, ShieldCheck, X, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldCheck, X, User } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [isRegister, setIsRegister] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,15 +17,22 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
 
     sound.playSuccess();
     
-    // Extract a friendly display name from the email address
-    const emailPrefix = email.split('@')[0];
-    const formattedName = emailPrefix
-      .split(/[._-]/)
-      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(' ');
+    let fullName = '';
+    if (isRegister) {
+      fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+    }
+    
+    if (!fullName) {
+      const emailPrefix = email.split('@')[0];
+      fullName = emailPrefix
+        .split(/[._-]/)
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+    }
 
-    const initials = formattedName
+    const initials = fullName
       .split(' ')
+      .filter(Boolean)
       .map(n => n[0])
       .join('')
       .substring(0, 2)
@@ -32,24 +41,19 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     const userProfile = {
       id: `user_${Date.now()}`,
       email: email.trim(),
-      username: emailPrefix,
-      name: formattedName || 'Equipo Builder',
-      role_title: 'Fullstack & Systems Engineer',
-      primary_category: 'AI / ML',
+      username: email.split('@')[0],
+      name: fullName || 'New Builder',
+      role_title: 'Member / Builder',
+      primary_category: 'General',
       avatar_initials: initials,
-      location: 'Bengaluru, IN',
-      experience_years: 3,
-      experience_level: 'Intermediate (2-4y)',
-      availability_hours_per_week: 25,
-      skills: [
-        { name: 'Python', level: 5 },
-        { name: 'FastAPI', level: 5 },
-        { name: 'React', level: 4 },
-        { name: 'Docker', level: 4 }
-      ],
-      interests: ['Startups', 'Research', 'Hackathons'],
-      bio: 'Builder and collaborator on Equipo platform.',
-      hackathons_won: 2,
+      location: 'India',
+      experience_years: 0,
+      experience_level: 'New Member',
+      availability_hours_per_week: 20,
+      skills: [], // Fresh empty skills list - no assumed skills
+      interests: [],
+      bio: 'New member on Equipo.',
+      hackathons_won: 0,
       timezone: 'IST (UTC+5:30)'
     };
 
@@ -63,10 +67,10 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       id: 'demo_user',
       email: 'prashanthraodugyala34@gmail.com',
       username: 'prashanth.dev',
-      name: 'Prashant Sharma',
-      role_title: 'AI Systems & Fullstack Engineer',
+      name: 'Prashanth Rao Dugyala',
+      role_title: 'AI Systems & Fullstack Developer',
       primary_category: 'AI / ML',
-      avatar_initials: 'PS',
+      avatar_initials: 'PR',
       location: 'Chennai, IN',
       experience_years: 3,
       experience_level: 'Advanced',
@@ -99,7 +103,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       padding: '1.5rem'
     }}>
       <div className="enterprise-card" style={{
-        maxWidth: '420px',
+        maxWidth: '440px',
         width: '100%',
         padding: '2rem',
         background: '#121424',
@@ -131,22 +135,56 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             {isRegister ? 'Create Your Account' : 'Sign in to Equipo'}
           </h2>
           <p style={{ fontSize: '0.8rem', color: '#a5b4fc', marginTop: '0.25rem' }}>
-            {isRegister ? 'Enter your email to start forming teams' : 'Access your team roster, invitations, and projects'}
+            {isRegister ? 'Enter your basic details to get started' : 'Access your team roster, invitations, and projects'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
           
+          {isRegister && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+              <div>
+                <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                  FIRST NAME *
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <User size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
+                  <input
+                    type="text"
+                    required
+                    placeholder="Prashanth"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.6rem 0.75rem 0.6rem 2rem', borderRadius: '0.45rem', fontSize: '0.85rem', outline: 'none' }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                  LAST NAME
+                </label>
+                <input
+                  type="text"
+                  placeholder="Rao"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.6rem 0.75rem', borderRadius: '0.45rem', fontSize: '0.85rem', outline: 'none' }}
+                />
+              </div>
+            </div>
+          )}
+
           <div>
             <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-              EMAIL ADDRESS
+              EMAIL ADDRESS *
             </label>
             <div style={{ position: 'relative' }}>
               <Mail size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
               <input
                 type="email"
                 required
-                placeholder="name@example.com"
+                placeholder="prashanthraodugyala34@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.65rem 0.8rem 0.65rem 2.2rem', borderRadius: '0.45rem', fontSize: '0.875rem', outline: 'none' }}
@@ -156,7 +194,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
 
           <div>
             <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-              PASSWORD
+              PASSWORD *
             </label>
             <div style={{ position: 'relative' }}>
               <Lock size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
@@ -172,7 +210,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           </div>
 
           <button type="submit" className="btn-primary" style={{ marginTop: '0.35rem', justifyContent: 'center', padding: '0.65rem' }}>
-            {isRegister ? 'Sign Up with Email' : 'Sign In'} <ArrowRight size={15} />
+            {isRegister ? 'Create Account' : 'Sign In'} <ArrowRight size={15} />
           </button>
         </form>
 
@@ -183,7 +221,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             onClick={handleQuickDemoLogin}
             style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem', padding: '0.5rem' }}
           >
-            ⚡ One-Click Demo (Prashant Sharma)
+            ⚡ One-Click Demo (Prashanth Rao)
           </button>
 
           <div style={{ textAlign: 'center', fontSize: '0.775rem', color: '#a5b4fc' }}>
