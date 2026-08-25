@@ -61,7 +61,7 @@ export default function CollaborationEmailModal({
       inset: 0,
       background: 'rgba(0, 0, 0, 0.82)',
       backdropFilter: 'blur(10px)',
-      zIndex: 500,
+      zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

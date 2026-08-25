@@ -18,7 +18,7 @@ export default function TeamManifestModal({ isOpen, onClose, activeSquad, synerg
       inset: 0,
       background: 'rgba(0, 0, 0, 0.8)',
       backdropFilter: 'blur(8px)',
-      zIndex: 200,
+      zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

@@ -80,7 +80,7 @@ export default function CandidateRegistrationModal({ isOpen, onClose, onRegister
       inset: 0,
       background: 'rgba(0, 0, 0, 0.85)',
       backdropFilter: 'blur(10px)',
-      zIndex: 400,
+      zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
