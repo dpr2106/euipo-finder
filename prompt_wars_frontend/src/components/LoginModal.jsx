@@ -1,4 +1,4 @@
-ï»¿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, ShieldCheck, X, User, AtSign } from 'lucide-react';
 import { sound } from '../utils/sound';
 
@@ -180,7 +180,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
               <input
                 type="password"
                 required
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.65rem 0.8rem 0.65rem 2.2rem', borderRadius: '0.45rem', fontSize: '0.875rem', outline: 'none' }}
@@ -200,7 +200,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             onClick={handleQuickDemoLogin}
             style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem', padding: '0.5rem' }}
           >
-            âš¡ One-Click Demo (@prashanth.dev)
+            ? One-Click Demo (@prashanth.dev)
           </button>
 
           <div style={{ textAlign: 'center', fontSize: '0.775rem', color: '#a5b4fc' }}>

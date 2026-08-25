@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -82,11 +82,11 @@ export default function SynergyLab({
   ];
 
   const domains = [
-    { key: 'frontend', label: 'Frontend Dev', icon: '💻' },
-    { key: 'backend', label: 'Backend Arch', icon: '⚙️' },
-    { key: 'ai_data', label: 'AI & Data', icon: '🧠' },
-    { key: 'design_ux', label: 'UI/UX Design', icon: '🎨' },
-    { key: 'pitch_biz', label: 'Delivery & Biz', icon: '🚀' },
+    { key: 'frontend', label: 'Frontend Dev', icon: '??' },
+    { key: 'backend', label: 'Backend Arch', icon: '??' },
+    { key: 'ai_data', label: 'AI & Data', icon: '??' },
+    { key: 'design_ux', label: 'UI/UX Design', icon: '??' },
+    { key: 'pitch_biz', label: 'Delivery & Biz', icon: '??' },
   ];
 
   const handleOpenPicker = (slotIdx) => {
@@ -516,7 +516,7 @@ export default function SynergyLab({
                   cursor: 'pointer'
                 }}
               >
-                ✨ Best Fit for {currentSlotMeta.category} ({currentPoolList.length})
+                ? Best Fit for {currentSlotMeta.category} ({currentPoolList.length})
               </button>
 
               <button
@@ -627,7 +627,7 @@ export default function SynergyLab({
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.5rem', borderTop: '1px solid #1f2545', fontSize: '0.725rem', color: '#818cf8' }}>
                       <span>Experience: <strong style={{ color: '#fff' }}>{builder.experience_years || 3}y</strong></span>
-                      <span style={{ color: '#34d399', fontWeight: 600 }}>Click to Allocate →</span>
+                      <span style={{ color: '#34d399', fontWeight: 600 }}>Click to Allocate ?</span>
                     </div>
 
                   </div>

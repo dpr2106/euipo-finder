@@ -1,229 +1,166 @@
-import React, { useState } from 'react';
-import { Shield, Search, BarChart3, FolderKanban, Sparkles, LogIn, UserPlus, LogOut, ChevronDown } from 'lucide-react';
+﻿import React from 'react';
+import { 
+  Users, 
+  Sparkles, 
+  FileText, 
+  LogIn, 
+  LogOut, 
+  User, 
+  UserCheck, 
+  Grid,
+  ChevronRight,
+  ShieldCheck
+} from 'lucide-react';
 import { sound } from '../utils/sound';
 
-export default function Navbar({
-  activeTab,
-  setActiveTab,
-  currentUser,
-  onOpenLogin,
-  onLogout
+export default function Navbar({ 
+  currentTab, 
+  setCurrentTab, 
+  currentUser, 
+  onOpenSignIn, 
+  onLogout,
+  onOpenManifest,
+  onOpenCandidateRegistration,
+  onOpenLanding
 }) {
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
-  const navItems = [
-    { id: 'landing', label: 'Home' },
-    { id: 'discover', label: 'Find Teammates' },
-    { id: 'synergy', label: 'Team Analytics' },
-    { id: 'projects', label: 'Project Roster' },
-    ...(currentUser ? [{ id: 'my-profile', label: 'My Skills & Matches' }] : []),
-  ];
-
-  const handleNav = (id) => {
-    sound.playClick();
-    setActiveTab(id);
-  };
-
   return (
-    <header style={{
-      borderBottom: '1px solid var(--border-subtle)',
-      background: 'rgba(9, 11, 16, 0.95)',
-      backdropFilter: 'blur(16px)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-      padding: '0.75rem 2rem'
-    }}>
-      <div style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '1rem'
-      }}>
+    <header className="navbar-enterprise">
+      <div className="navbar-container">
         
-        {/* Brand Logo */}
-        <div
-          onClick={() => handleNav('landing')}
+        {/* Brand Logo & Name */}
+        <div 
+          onClick={() => { sound.playClick(); onOpenLanding ? onOpenLanding() : setCurrentTab('discovery'); }} 
           style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', cursor: 'pointer' }}
         >
-          <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '6px',
-            background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff'
-          }}>
-            <Shield size={18} strokeWidth={2.2} />
+          <img 
+            src="/logo.jpg" 
+            alt="Equipo Logo" 
+            style={{ 
+              width: '34px', 
+              height: '34px', 
+              borderRadius: '8px', 
+              objectFit: 'cover',
+              border: '1px solid #8b5cf6',
+              boxShadow: '0 0 12px rgba(139, 92, 246, 0.4)'
+            }} 
+          />
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ 
+                fontSize: '1.2rem', 
+                fontWeight: 800, 
+                letterSpacing: '-0.02em', 
+                background: 'linear-gradient(135deg, #ffffff 40%, #c4b5fd 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                EQUIPO
+              </span>
+              <span className="badge-pill badge-purple" style={{ fontSize: '0.65rem', padding: '0.1rem 0.4rem' }}>
+                v2.0
+              </span>
+            </div>
+            <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 600 }}>
+              Team Formation Platform
+            </div>
           </div>
-          <span style={{ fontWeight: 700, fontSize: '1.05rem', letterSpacing: '-0.01em', color: '#f8fafc' }}>
-            Equipo
-          </span>
         </div>
 
-        {/* Center Nav Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          {navItems.map((item) => {
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleNav(item.id)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: isActive ? '#f8fafc' : '#94a3b8',
-                  fontWeight: isActive ? 600 : 500,
-                  fontSize: '0.85rem',
-                  cursor: 'pointer',
-                  padding: '0.35rem 0',
-                  borderBottom: isActive ? '2px solid #8b5cf6' : '2px solid transparent',
-                  transition: 'color 0.15s ease'
-                }}
-              >
-                {item.label}
-              </button>
-            );
-          })}
+        {/* Primary Navigation Tabs */}
+        <nav className="nav-tabs">
+          <button 
+            className={`nav-tab-item ${currentTab === 'discovery' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setCurrentTab('discovery'); }}
+          >
+            <Grid size={15} />
+            <span>Find Teammates</span>
+          </button>
+
+          <button 
+            className={`nav-tab-item ${currentTab === 'analytics' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setCurrentTab('analytics'); }}
+          >
+            <Sparkles size={15} />
+            <span>Team Analytics</span>
+          </button>
+
+          <button 
+            className={`nav-tab-item ${currentTab === 'projects' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setCurrentTab('projects'); }}
+          >
+            <Users size={15} />
+            <span>Project Hub</span>
+          </button>
+
+          <button 
+            className={`nav-tab-item ${currentTab === 'profile' ? 'active' : ''}`}
+            onClick={() => { sound.playClick(); setCurrentTab('profile'); }}
+          >
+            <UserCheck size={15} />
+            <span>My Skills & Matches</span>
+          </button>
         </nav>
 
-        {/* Right CTA / Auth Status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative' }}>
+        {/* Right Actions & User Profile */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          
+          <button 
+            className="btn-secondary"
+            onClick={() => { sound.playClick(); onOpenCandidateRegistration(); }}
+            style={{ fontSize: '0.75rem', padding: '0.45rem 0.8rem' }}
+          >
+            + Join Candidate Pool
+          </button>
+
+          <button 
+            className="btn-primary"
+            onClick={() => { sound.playClick(); onOpenManifest(); }}
+            style={{ fontSize: '0.75rem', padding: '0.45rem 0.85rem' }}
+          >
+            <FileText size={14} />
+            <span>Team Manifest</span>
+          </button>
+
           {currentUser ? (
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                style={{
-                  background: '#11141d',
-                  border: '1px solid var(--border-subtle)',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: '0.45rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  cursor: 'pointer',
-                  color: '#f8fafc'
-                }}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#121424', border: '1px solid #293154', padding: '0.25rem 0.6rem', borderRadius: '0.5rem' }}>
+              <div style={{
+                width: '26px',
+                height: '26px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: '#fff'
+              }}>
+                {currentUser.avatar_initials || 'U'}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '0.785rem', fontWeight: 600, color: '#f8fafc' }}>
+                  @{currentUser.username || currentUser.name}
+                </span>
+              </div>
+              <button 
+                onClick={() => { sound.playClick(); onLogout(); }}
+                title="Log Out"
+                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.2rem', marginLeft: '0.25rem' }}
               >
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  color: '#fff'
-                }}>
-                  {currentUser.avatar_initials || 'ME'}
-                </div>
-                <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{currentUser.name}</span>
-                <ChevronDown size={14} color="var(--text-muted)" />
+                <LogOut size={14} />
               </button>
-
-              {/* User Dropdown Menu */}
-              {isUserMenuOpen && (
-                <div style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: '120%',
-                  background: '#11141d',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '0.5rem',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)',
-                  width: '200px',
-                  zIndex: 100,
-                  overflow: 'hidden',
-                  padding: '0.35rem 0'
-                }}>
-                  <div style={{ padding: '0.6rem 0.85rem', borderBottom: '1px solid var(--border-subtle)' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#f8fafc' }}>{currentUser.name}</div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{currentUser.role_title}</div>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setIsUserMenuOpen(false);
-                      handleNav('my-profile');
-                    }}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.5rem 0.85rem',
-                      background: 'none',
-                      border: 'none',
-                      color: '#cbd5e1',
-                      fontSize: '0.8rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.45rem'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = '#181d2a'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
-                  >
-                    <Sparkles size={14} color="#60a5fa" /> My Skills & Matches
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsUserMenuOpen(false);
-                      onLogout();
-                    }}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.5rem 0.85rem',
-                      background: 'none',
-                      border: 'none',
-                      color: '#f87171',
-                      fontSize: '0.8rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.45rem',
-                      borderTop: '1px solid var(--border-subtle)'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = '#181d2a'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
-                  >
-                    <LogOut size={14} /> Log Out
-                  </button>
-                </div>
-              )}
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <button
-                onClick={onOpenLogin}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#cbd5e1',
-                  fontSize: '0.825rem',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  padding: '0.4rem 0.75rem'
-                }}
-              >
-                Sign In
-              </button>
-
-              <button
-                className="btn-primary"
-                onClick={onOpenLogin}
-                style={{ padding: '0.45rem 0.95rem', fontSize: '0.825rem' }}
-              >
-                <UserPlus size={14} /> Create Profile
-              </button>
-            </div>
+            <button 
+              className="btn-secondary"
+              onClick={() => { sound.playClick(); onOpenSignIn(); }}
+              style={{ fontSize: '0.75rem', padding: '0.45rem 0.8rem', color: '#c4b5fd', borderColor: '#3d497c' }}
+            >
+              <LogIn size={14} />
+              <span>Sign In</span>
+            </button>
           )}
+
         </div>
 
       </div>

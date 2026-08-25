@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import TeammateDiscoveryView from './components/TeammateDiscoveryView';
@@ -99,7 +99,7 @@ export default function App() {
     };
     setAllBuilders([newBuilder, ...allBuilders]);
     
-    showToast(`✨ ${newCandidate.name} added to the candidate pool! Team leads can now discover and email you.`);
+    showToast(`? ${newCandidate.name} added to the candidate pool! Team leads can now discover and email you.`);
   };
 
   const handleOpenEmailModal = (candidate) => {
@@ -111,7 +111,7 @@ export default function App() {
   };
 
   const handleEmailSent = (candidate, receipt) => {
-    showToast(`✉️ Invitation email dispatched to ${candidate.name}!`);
+    showToast(`?? Invitation email dispatched to ${candidate.name}!`);
   };
 
   return (
@@ -219,7 +219,7 @@ export default function App() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ fontWeight: 700, color: '#f8fafc' }}>Equipo</span>
-            <span>—</span>
+            <span>�</span>
             <span>Autonomous Skill Matching & Project Synergy Platform</span>
           </div>
           <div style={{ color: 'var(--text-muted)' }}>

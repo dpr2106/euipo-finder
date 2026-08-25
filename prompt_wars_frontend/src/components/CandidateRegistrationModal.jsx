@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { UserPlus, Plus, X, Sparkles, CheckCircle2, ShieldCheck, MapPin, Briefcase, Clock, Tag, Mail, AtSign } from 'lucide-react';
 import { sound } from '../utils/sound';
 
@@ -238,7 +238,7 @@ export default function CandidateRegistrationModal({ isOpen, onClose, onRegister
                   onClick={() => handleRemoveSkill(s)}
                   title="Click to remove"
                 >
-                  {s} ✕
+                  {s} ?
                 </span>
               ))}
             </div>

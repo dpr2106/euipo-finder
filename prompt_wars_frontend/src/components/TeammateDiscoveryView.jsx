@@ -1,4 +1,4 @@
-ï»¿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Search, Send, Check, Eye, MapPin, Briefcase, Clock, X, ExternalLink, Code2, Award, CheckCircle2, UserPlus, Sparkles, Filter, SlidersHorizontal, Mail } from 'lucide-react';
 import { sound } from '../utils/sound';
 
@@ -373,11 +373,11 @@ export default function TeammateDiscoveryView({
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                     <MapPin size={12} color="#8b5cf6" /> {c.location}
                   </span>
-                  <span>Â·</span>
+                  <span>·</span>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <Briefcase size={12} /> {c.experience_years}y Â· {c.experience_level}
+                    <Briefcase size={12} /> {c.experience_years}y · {c.experience_level}
                   </span>
-                  <span>Â·</span>
+                  <span>·</span>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                     <Clock size={12} /> {c.availability}
                   </span>
@@ -428,7 +428,7 @@ export default function TeammateDiscoveryView({
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
                     {c.why_match.map((reason, rIdx) => (
                       <div key={rIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.45rem', fontSize: '0.75rem', color: '#cbd5e1', lineHeight: 1.35 }}>
-                        <span style={{ color: '#10b981', fontWeight: 700 }}>âœ“</span>
+                        <span style={{ color: '#10b981', fontWeight: 700 }}>?</span>
                         <span>{reason}</span>
                       </div>
                     ))}
@@ -525,7 +525,7 @@ export default function TeammateDiscoveryView({
               <div>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>{selectedProfile.name}</h2>
                 <div style={{ color: '#c4b5fd', fontWeight: 500, fontSize: '0.85rem' }}>{selectedProfile.role}</div>
-                <div style={{ fontSize: '0.75rem', color: '#a5b4fc' }}>{selectedProfile.location} â€¢ {selectedProfile.timezone}</div>
+                <div style={{ fontSize: '0.75rem', color: '#a5b4fc' }}>{selectedProfile.location} • {selectedProfile.timezone}</div>
               </div>
             </div>
 
