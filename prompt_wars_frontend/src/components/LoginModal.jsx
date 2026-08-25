@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, ShieldCheck, X, User, AtSign } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldCheck, X, AtSign, Zap } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function LoginModal({ isOpen, onClose, onLogin }) {
@@ -137,7 +137,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           
           <div>
             <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-              USERNAME / HANDLE (Unique Identifier) *
+              USERNAME / HANDLE *
             </label>
             <div style={{ position: 'relative' }}>
               <AtSign size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
@@ -155,7 +155,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           {isRegister && (
             <div>
               <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                EMAIL ADDRESS (For Collaboration Invites) *
+                EMAIL ADDRESS *
               </label>
               <div style={{ position: 'relative' }}>
                 <Mail size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
@@ -180,7 +180,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
               <input
                 type="password"
                 required
-                placeholder="��������"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.65rem 0.8rem 0.65rem 2.2rem', borderRadius: '0.45rem', fontSize: '0.875rem', outline: 'none' }}
@@ -198,9 +198,10 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             type="button"
             className="btn-secondary"
             onClick={handleQuickDemoLogin}
-            style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem', padding: '0.5rem' }}
+            style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem', padding: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
           >
-            ? One-Click Demo (@prashanth.dev)
+            <Zap size={14} color="#8b5cf6" />
+            <span>One-Click Demo (@prashanth.dev)</span>
           </button>
 
           <div style={{ textAlign: 'center', fontSize: '0.775rem', color: '#a5b4fc' }}>
