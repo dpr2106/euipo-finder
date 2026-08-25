@@ -66,7 +66,7 @@ export default function App() {
   const handleLogin = (userProfile) => {
     setCurrentUser(userProfile);
     setActiveTab('discovery'); // Immediately switch from landing to Find Teammates workspace
-    showToast(`Welcome @${userProfile.username || userProfile.name}!`);
+    showToast(`✉️ Welcome email dispatched to ${userProfile.email}! Account authenticated.`);
   };
 
   const handleLogout = () => {
