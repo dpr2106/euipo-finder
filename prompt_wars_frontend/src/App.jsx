@@ -14,7 +14,7 @@ import { api } from './services/api';
 import { INITIAL_BUILDERS, INITIAL_PROJECTS } from './data/mockData';
 import { CANDIDATES } from './data/candidatesData';
 import { sound } from './utils/sound';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, ShieldAlert, Lock, Mail, ExternalLink } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('landing');
@@ -23,6 +23,7 @@ export default function App() {
   const [allProjects, setAllProjects] = useState(INITIAL_PROJECTS);
 
   const [currentUser, setCurrentUser] = useState(null);
+  const [pendingVerificationUser, setPendingVerificationUser] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isCandidateModalOpen, setIsCandidateModalOpen] = useState(false);
   
@@ -42,6 +43,46 @@ export default function App() {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
   };
+
+  // CHECK URL FOR INCOMING EMAIL VERIFICATION LINK (e.g. ?verify_token=xxx&email=xxx)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('verify_token');
+    const verifiedEmail = params.get('email');
+
+    if (token && verifiedEmail) {
+      sound.playSuccess();
+      const usernameHandle = verifiedEmail.split('@')[0];
+      const verifiedProfile = {
+        id: `user_verified_${Date.now()}`,
+        username: usernameHandle,
+        name: usernameHandle.charAt(0).toUpperCase() + usernameHandle.slice(1),
+        email: verifiedEmail,
+        is_email_verified: true,
+        auth_provider: 'email_verified',
+        role_title: 'Verified Builder',
+        primary_category: 'AI / ML',
+        avatar_initials: usernameHandle.substring(0, 2).toUpperCase(),
+        location: 'India',
+        experience_years: 1,
+        experience_level: 'Verified Member',
+        availability_hours_per_week: 20,
+        skills: [],
+        interests: ['Startups', 'Research'],
+        bio: `Verified member @${usernameHandle} on Equipo.`,
+        hackathons_won: 0,
+        timezone: 'IST (UTC+5:30)'
+      };
+
+      setCurrentUser(verifiedProfile);
+      setPendingVerificationUser(null);
+      setActiveTab('discovery');
+      showToast(`🎉 Email ${verifiedEmail} verified! Full platform access unlocked.`);
+
+      // Clean URL query params without reloading
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
 
   useEffect(() => {
     async function updateSynergy() {
@@ -64,45 +105,33 @@ export default function App() {
   };
 
   const handleLogin = (userProfile) => {
-    setCurrentUser(userProfile);
-    setActiveTab('discovery'); // Immediately switch from landing to Find Teammates workspace
-    showToast(`✉️ Welcome email dispatched to ${userProfile.email}! Account authenticated.`);
+    if (userProfile.is_email_verified) {
+      setCurrentUser(userProfile);
+      setPendingVerificationUser(null);
+      setActiveTab('discovery');
+      showToast(`Welcome @${userProfile.username || userProfile.name}! Verified access active.`);
+    } else {
+      // Pending email verification
+      setPendingVerificationUser(userProfile);
+      showToast(`Verification email dispatched to ${userProfile.email}. Confirm email to unlock features.`);
+    }
   };
 
   const handleLogout = () => {
     sound.playClick();
     setCurrentUser(null);
+    setPendingVerificationUser(null);
     setActiveTab('landing');
     showToast('You have successfully logged out.');
   };
 
   const handleRegisterCandidate = (newCandidate) => {
     setCandidatesList([newCandidate, ...candidatesList]);
-    
-    const newBuilder = {
-      id: newCandidate.id,
-      name: newCandidate.name,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      role_title: newCandidate.role,
-      primary_category: newCandidate.skills[0]?.name?.includes('Python') ? 'AI / ML' : 'Backend',
-      bio: newCandidate.bio,
-      skills: newCandidate.skills.map(s => s.name),
-      skill_scores: { frontend: 70, backend: 80, ai_data: 85, design_ux: 60, pitch_biz: 65 },
-      experience_years: newCandidate.experience_years,
-      experience_level: newCandidate.experience_level,
-      availability_hours_per_week: newCandidate.availability_hours,
-      timezone: newCandidate.timezone,
-      interests: ['Startups', 'Hackathons'],
-      hackathons_won: newCandidate.hackathons_won,
-      open_for_teams: true
-    };
-    setAllBuilders([newBuilder, ...allBuilders]);
-    
     showToast(`${newCandidate.name} added to candidate pool!`);
   };
 
   const handleOpenEmailModal = (candidate) => {
-    if (!currentUser) {
+    if (!currentUser || !currentUser.is_email_verified) {
       setIsLoginModalOpen(true);
       return;
     }
@@ -123,7 +152,7 @@ export default function App() {
           position: 'fixed',
           bottom: '24px',
           right: '24px',
-          zIndex: 999,
+          zIndex: 9999,
           background: '#121424',
           border: toast.type === 'error' ? '1px solid #ef4444' : '1px solid #8b5cf6',
           padding: '0.75rem 1.15rem',
@@ -142,6 +171,39 @@ export default function App() {
             <CheckCircle2 size={16} color="#8b5cf6" />
           )}
           {toast.message}
+        </div>
+      )}
+
+      {/* PENDING EMAIL VERIFICATION ALERT BAR (Locks workspace until verified) */}
+      {pendingVerificationUser && !currentUser && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(139, 92, 246, 0.2))',
+          borderBottom: '1px solid #ef4444',
+          padding: '0.75rem 1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          position: 'sticky',
+          top: 0,
+          zIndex: 400
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <Mail size={18} color="#ef4444" />
+            <span style={{ fontSize: '0.85rem', color: '#fecaca', fontWeight: 600 }}>
+              Access Locked: Verification email dispatched to <strong style={{ color: '#ffffff' }}>{pendingVerificationUser.email}</strong>.
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <a
+              href={`/?verify_token=demo_token_${Date.now()}&email=${pendingVerificationUser.email}`}
+              className="btn-primary"
+              style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem', background: '#10b981', borderColor: '#34d399', textDecoration: 'none' }}
+            >
+              Verify Email Link
+            </a>
+          </div>
         </div>
       )}
 

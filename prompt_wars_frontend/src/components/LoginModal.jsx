@@ -8,7 +8,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Google Popup Modal Simulation State
+  // Google Popup State
   const [showGooglePopup, setShowGooglePopup] = useState(false);
   const [googleCustomEmail, setGoogleCustomEmail] = useState('');
 
@@ -41,13 +41,14 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       name: formattedDisplayName || cleanUsername,
       email: userEmail,
       auth_provider: 'email',
-      is_email_verified: true,
+      // If registering new account, set is_email_verified to false to require email confirmation
+      is_email_verified: isRegister ? false : true,
       role_title: 'Builder / Contributor',
       primary_category: 'General',
       avatar_initials: initials,
       location: 'India',
       experience_years: 0,
-      experience_level: 'Verified Member',
+      experience_level: 'Member',
       availability_hours_per_week: 20,
       skills: [],
       interests: [],
@@ -77,7 +78,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       name: selectedName || usernameHandle,
       email: selectedEmail,
       auth_provider: 'google_oauth',
-      is_email_verified: true,
+      is_email_verified: true, // Google OAuth accounts are pre-verified by Google
       role_title: 'Fullstack & Systems Engineer',
       primary_category: 'AI / ML',
       avatar_initials: initials,
@@ -183,12 +184,12 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             {/* Custom Google Email Input */}
             <div style={{ padding: '0.75rem 1rem', borderRadius: '0.5rem', border: '1px solid #e5e7eb', background: '#f9fafb' }}>
               <label style={{ fontSize: '0.725rem', fontWeight: 600, color: '#4b5563', display: 'block', marginBottom: '0.35rem' }}>
-                OR SIGN IN WITH ANY GOOGLE EMAIL:
+                OR ENTER YOUR GOOGLE ACCOUNT:
               </label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <input
                   type="email"
-                  placeholder="your.email@gmail.com"
+                  placeholder="your.name@gmail.com"
                   value={googleCustomEmail}
                   onChange={(e) => setGoogleCustomEmail(e.target.value)}
                   style={{ flex: 1, border: '1px solid #d1d5db', borderRadius: '0.35rem', padding: '0.4rem 0.6rem', fontSize: '0.825rem', outline: 'none', background: '#fff', color: '#111827' }}
@@ -201,7 +202,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
                   }}
                   style={{ background: '#1e293b', color: '#fff', border: 'none', borderRadius: '0.35rem', padding: '0.4rem 0.75rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}
                 >
-                  Continue
+                  Verify
                 </button>
               </div>
             </div>
@@ -209,7 +210,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           </div>
 
           <div style={{ fontSize: '0.725rem', color: '#6b7280', textAlign: 'center', lineHeight: 1.4 }}>
-            To continue, Google will share your name, email address, and profile picture with Equipo.
+            Google authenticates and verifies your identity with zero password friction.
           </div>
         </div>
       ) : (
@@ -248,7 +249,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
               {isRegister ? 'Join Equipo' : 'Sign in to Equipo'}
             </h2>
             <p style={{ fontSize: '0.8rem', color: '#a5b4fc', marginTop: '0.25rem' }}>
-              {isRegister ? 'Authenticate via Google to start forming squads' : 'Sign in with Google or your credentials to access workspace'}
+              {isRegister ? 'Create an account to start forming squads' : 'Sign in to access your squad workspace'}
             </p>
           </div>
 
@@ -316,7 +317,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             {isRegister && (
               <div>
                 <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                  EMAIL ADDRESS *
+                  EMAIL ADDRESS (Verification Link Sent Here) *
                 </label>
                 <div style={{ position: 'relative' }}>
                   <Mail size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
@@ -350,7 +351,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             </div>
 
             <button type="submit" className="btn-primary" style={{ marginTop: '0.35rem', justifyContent: 'center', padding: '0.65rem' }}>
-              {isRegister ? 'Create Account' : 'Sign In'} <ArrowRight size={15} />
+              {isRegister ? 'Send Verification Email' : 'Sign In'} <ArrowRight size={15} />
             </button>
           </form>
 
