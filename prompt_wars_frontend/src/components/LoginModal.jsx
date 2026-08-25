@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, ShieldCheck, X, AtSign, Zap, CheckCircle2, KeyRound, ExternalLink, RefreshCw } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldCheck, X, AtSign, Zap, CheckCircle2, ExternalLink } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function LoginModal({ isOpen, onClose, onLogin }) {
@@ -8,10 +8,8 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Email Verification States
-  const [verificationStep, setVerificationStep] = useState(false); // true when awaiting confirmation
-  const [verificationCode, setVerificationCode] = useState('749215');
-  const [inputCode, setInputCode] = useState('');
+  // Email Confirmation State
+  const [verificationStep, setVerificationStep] = useState(false);
   const [showEmailInboxPreview, setShowEmailInboxPreview] = useState(false);
 
   if (!isOpen) return null;
@@ -22,9 +20,6 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
 
     if (isRegister && !verificationStep) {
       sound.playClick();
-      // Generate a dynamic 6-digit security token
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
-      setVerificationCode(code);
       setVerificationStep(true);
       return;
     }
@@ -38,7 +33,6 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     const cleanUsername = username.trim().toLowerCase().replace(/^@/, '');
     const userEmail = email.trim() || (isRegister ? `${cleanUsername}@gmail.com` : 'prashanthraodugyala34@gmail.com');
 
-    // Extract display initials from username
     const initials = cleanUsername
       .split(/[._-]/)
       .map(n => n[0])
@@ -111,6 +105,8 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     handleModalClose();
   };
 
+  const targetEmail = email.trim() || `${username.trim() || 'user'}@gmail.com`;
+
   return (
     <div style={{
       position: 'fixed',
@@ -145,8 +141,8 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             {!showEmailInboxPreview ? (
               <div style={{ textAlign: 'center' }}>
                 <div style={{
-                  width: '52px',
-                  height: '52px',
+                  width: '56px',
+                  height: '56px',
                   borderRadius: '50%',
                   background: 'rgba(139, 92, 246, 0.15)',
                   border: '1px solid #8b5cf6',
@@ -156,76 +152,41 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
                   color: '#c4b5fd',
                   marginBottom: '1rem'
                 }}>
-                  <Mail size={26} />
+                  <Mail size={28} />
                 </div>
+                
                 <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc' }}>
-                  Verify Your Email Address
+                  Check Your Inbox
                 </h2>
-                <p style={{ fontSize: '0.825rem', color: '#a5b4fc', marginTop: '0.35rem', lineHeight: 1.4 }}>
-                  We sent a confirmation link & 6-digit verification code to: <br />
-                  <strong style={{ color: '#6ee7b7' }}>{email || `${username}@gmail.com`}</strong>
+                
+                <p style={{ fontSize: '0.85rem', color: '#a5b4fc', marginTop: '0.5rem', lineHeight: 1.5 }}>
+                  We've sent a verification link to: <br />
+                  <strong style={{ color: '#6ee7b7', fontSize: '0.95rem' }}>{targetEmail}</strong>
                 </p>
 
-                {/* Inbox Simulation Box */}
-                <div style={{
-                  marginTop: '1.25rem',
-                  background: '#0a0b14',
-                  border: '1px solid #293154',
-                  borderRadius: '0.5rem',
-                  padding: '1rem',
-                  textAlign: 'left'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#818cf8', fontWeight: 600 }}>INBOX DISPATCH SIMULATOR</span>
-                    <button
-                      onClick={() => setShowEmailInboxPreview(true)}
-                      style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '3px' }}
-                    >
-                      <ExternalLink size={12} /> Open Email Inbox
-                    </button>
-                  </div>
+                <p style={{ fontSize: '0.785rem', color: '#94a3b8', marginTop: '0.75rem', lineHeight: 1.4 }}>
+                  Please check your email and click <strong>Verify Email</strong> to confirm your registration and access Equipo.
+                </p>
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#121424', padding: '0.6rem 0.8rem', borderRadius: '0.35rem', border: '1px solid #3d497c' }}>
-                    <div>
-                      <div style={{ fontSize: '0.725rem', color: '#94a3b8' }}>One-Time Code (OTP):</div>
-                      <div style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.2em', color: '#c4b5fd', fontFamily: 'var(--font-mono)' }}>
-                        {verificationCode}
-                      </div>
-                    </div>
-                    <button
-                      className="btn-secondary"
-                      onClick={() => { sound.playClick(); setInputCode(verificationCode); }}
-                      style={{ fontSize: '0.725rem', padding: '0.35rem 0.6rem' }}
-                    >
-                      Auto-Fill Code
-                    </button>
-                  </div>
-                </div>
-
-                <form onSubmit={(e) => { e.preventDefault(); finalizeLogin(); }} style={{ marginTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                  <div>
-                    <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem', textAlign: 'left' }}>
-                      ENTER 6-DIGIT CODE
-                    </label>
-                    <input
-                      type="text"
-                      maxLength={6}
-                      required
-                      placeholder="e.g. 749215"
-                      value={inputCode}
-                      onChange={(e) => setInputCode(e.target.value)}
-                      style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.65rem', borderRadius: '0.45rem', fontSize: '1.1rem', letterSpacing: '0.15em', textAlign: 'center', outline: 'none', fontFamily: 'var(--font-mono)' }}
-                    />
-                  </div>
-
-                  <button type="submit" className="btn-primary" style={{ justifyContent: 'center', padding: '0.65rem' }}>
-                    <CheckCircle2 size={16} /> Confirm Email & Enter Equipo
+                <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <button 
+                    onClick={() => { sound.playClick(); setShowEmailInboxPreview(true); }}
+                    className="btn-primary" 
+                    style={{ justifyContent: 'center', padding: '0.75rem' }}
+                  >
+                    <ExternalLink size={16} /> Open Confirmation Email
                   </button>
-                </form>
 
+                  <button
+                    onClick={() => { sound.playClick(); setVerificationStep(false); }}
+                    style={{ background: 'none', border: 'none', color: '#818cf8', fontSize: '0.75rem', cursor: 'pointer', padding: '0.3rem' }}
+                  >
+                    ← Back to edit email
+                  </button>
+                </div>
               </div>
             ) : (
-              /* REALISTIC EMAIL TEMPLATE PREVIEW MATCHING CRUSH'S EMAIL STYLE */
+              /* REALISTIC EMAIL TEMPLATE PREVIEW */
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #293154', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -236,14 +197,14 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
                     onClick={() => setShowEmailInboxPreview(false)}
                     style={{ background: 'none', border: 'none', color: '#818cf8', fontSize: '0.75rem', cursor: 'pointer' }}
                   >
-                    Back to code entry
+                    ← Back
                   </button>
                 </div>
 
                 <div style={{ background: '#ffffff', color: '#0f172a', padding: '1.75rem', borderRadius: '0.6rem', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
-                    <strong>Equipo Auth</strong> &lt;no-reply@auth.equipo-network.com&gt;<br />
-                    to me &lt;{email || `${username}@gmail.com`}&gt;
+                    <strong>Equipo</strong> &lt;no-reply@auth.equipo-network.com&gt;<br />
+                    to me &lt;{targetEmail}&gt;
                   </div>
 
                   <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.75rem' }}>
@@ -255,7 +216,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
                   </p>
 
                   <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5, marginBottom: '1.5rem' }}>
-                    Please confirm your email address (<strong>{email || `${username}@gmail.com`}</strong>) by clicking the button below:
+                    Please confirm your email address (<strong>{targetEmail}</strong>) below:
                   </p>
 
                   <button
@@ -332,7 +293,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
               {isRegister && (
                 <div>
                   <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                    EMAIL ADDRESS (Verification Link Sent Here) *
+                    EMAIL ADDRESS *
                   </label>
                   <div style={{ position: 'relative' }}>
                     <Mail size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
