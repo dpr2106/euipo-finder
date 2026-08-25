@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Search, Filter, Users, Award, Clock, MapPin, Code2, Globe2, Plus, Check, Zap } from 'lucide-react';
 import { sound } from '../utils/sound';
 

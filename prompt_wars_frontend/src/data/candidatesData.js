@@ -1,4 +1,4 @@
-export const CANDIDATES = [
+﻿export const CANDIDATES = [
   {
     id: "c1",
     initials: "AK",

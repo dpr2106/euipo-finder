@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { X, Shield, Printer, CheckCircle2 } from 'lucide-react';
 import { sound } from '../utils/sound';
 

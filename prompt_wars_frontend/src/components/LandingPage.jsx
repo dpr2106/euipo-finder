@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Shield, ArrowRight, CheckCircle2, Sparkles, Users, BarChart3, Cpu, Search, Layers, Rocket, Microscope, Trophy, Code2 } from 'lucide-react';
 import { sound } from '../utils/sound';
 

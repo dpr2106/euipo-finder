@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import TeammateDiscoveryView from './components/TeammateDiscoveryView';
@@ -219,7 +219,7 @@ export default function App() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ fontWeight: 700, color: '#f8fafc' }}>Equipo</span>
-            <span>—</span>
+            <span>ï¿½</span>
             <span>Autonomous Skill Matching & Project Synergy Platform</span>
           </div>
           <div style={{ color: 'var(--text-muted)' }}>

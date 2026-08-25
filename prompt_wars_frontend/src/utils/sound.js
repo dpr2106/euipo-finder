@@ -1,4 +1,4 @@
-// Tactile Sound FX using native Web Audio API (Zero external assets, instant 0-lag feedback)
+﻿// Tactile Sound FX using native Web Audio API (Zero external assets, instant 0-lag feedback)
 class SoundManager {
   constructor() {
     this.ctx = null;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { User, Plus, X, Sparkles, CheckCircle2, Clock, Briefcase, MapPin, Send, ArrowRight, ShieldCheck, Tag } from 'lucide-react';
 import { sound } from '../utils/sound';
 
