@@ -1,11 +1,10 @@
 ﻿import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, ShieldCheck, X, User } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldCheck, X, User, AtSign } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [isRegister, setIsRegister] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,36 +12,31 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) return;
+    if (!username.trim() || !password.trim()) return;
 
     sound.playSuccess();
     
-    let fullName = '';
-    if (isRegister) {
-      fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
-    }
-    
-    if (!fullName) {
-      const emailPrefix = email.split('@')[0];
-      fullName = emailPrefix
-        .split(/[._-]/)
-        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ');
-    }
+    const cleanUsername = username.trim().toLowerCase().replace(/^@/, '');
+    const userEmail = email.trim() || (isRegister ? `${cleanUsername}@gmail.com` : 'prashanthraodugyala34@gmail.com');
 
-    const initials = fullName
-      .split(' ')
-      .filter(Boolean)
+    // Extract display initials from username
+    const initials = cleanUsername
+      .split(/[._-]/)
       .map(n => n[0])
       .join('')
       .substring(0, 2)
       .toUpperCase() || 'EQ';
 
+    const formattedDisplayName = cleanUsername
+      .split(/[._-]/)
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+
     const userProfile = {
       id: `user_${Date.now()}`,
-      email: email.trim(),
-      username: email.split('@')[0],
-      name: fullName || 'New Builder',
+      username: cleanUsername,
+      name: formattedDisplayName || cleanUsername,
+      email: userEmail,
       role_title: 'Member / Builder',
       primary_category: 'General',
       avatar_initials: initials,
@@ -50,9 +44,9 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       experience_years: 0,
       experience_level: 'New Member',
       availability_hours_per_week: 20,
-      skills: [], // Fresh empty skills list - no assumed skills
+      skills: [],
       interests: [],
-      bio: 'New member on Equipo.',
+      bio: `Builder profile for @${cleanUsername} on Equipo.`,
       hackathons_won: 0,
       timezone: 'IST (UTC+5:30)'
     };
@@ -65,9 +59,9 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     sound.playSuccess();
     onLogin({
       id: 'demo_user',
-      email: 'prashanthraodugyala34@gmail.com',
       username: 'prashanth.dev',
-      name: 'Prashanth Rao Dugyala',
+      name: 'Prashanth Rao',
+      email: 'prashanthraodugyala34@gmail.com',
       role_title: 'AI Systems & Fullstack Developer',
       primary_category: 'AI / ML',
       avatar_initials: 'PR',
@@ -135,62 +129,47 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             {isRegister ? 'Create Your Account' : 'Sign in to Equipo'}
           </h2>
           <p style={{ fontSize: '0.8rem', color: '#a5b4fc', marginTop: '0.25rem' }}>
-            {isRegister ? 'Enter your basic details to get started' : 'Access your team roster, invitations, and projects'}
+            {isRegister ? 'Choose a unique username and enter your email' : 'Sign in using your username and password'}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
           
-          {isRegister && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-              <div>
-                <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                  FIRST NAME *
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <User size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
-                  <input
-                    type="text"
-                    required
-                    placeholder="Prashanth"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.6rem 0.75rem 0.6rem 2rem', borderRadius: '0.45rem', fontSize: '0.85rem', outline: 'none' }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                  LAST NAME
-                </label>
-                <input
-                  type="text"
-                  placeholder="Rao"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.6rem 0.75rem', borderRadius: '0.45rem', fontSize: '0.85rem', outline: 'none' }}
-                />
-              </div>
-            </div>
-          )}
-
           <div>
             <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-              EMAIL ADDRESS *
+              USERNAME / HANDLE (Unique Identifier) *
             </label>
             <div style={{ position: 'relative' }}>
-              <Mail size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
+              <AtSign size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
               <input
-                type="email"
+                type="text"
                 required
-                placeholder="prashanthraodugyala34@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="prashanth.dev"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#fff', padding: '0.65rem 0.8rem 0.65rem 2.2rem', borderRadius: '0.45rem', fontSize: '0.875rem', outline: 'none' }}
               />
             </div>
           </div>
+
+          {isRegister && (
+            <div>
+              <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                EMAIL ADDRESS (For Collaboration Invites) *
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Mail size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#818cf8' }} />
+                <input
+                  type="email"
+                  required
+                  placeholder="prashanthraodugyala34@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{ width: '100%', background: '#0a0b14', border: '1px solid #293154', color: '#6ee7b7', padding: '0.65rem 0.8rem 0.65rem 2.2rem', borderRadius: '0.45rem', fontSize: '0.875rem', outline: 'none' }}
+                />
+              </div>
+            </div>
+          )}
 
           <div>
             <label style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
@@ -221,7 +200,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             onClick={handleQuickDemoLogin}
             style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem', padding: '0.5rem' }}
           >
-            ⚡ One-Click Demo (Prashanth Rao)
+            ⚡ One-Click Demo (@prashanth.dev)
           </button>
 
           <div style={{ textAlign: 'center', fontSize: '0.775rem', color: '#a5b4fc' }}>
